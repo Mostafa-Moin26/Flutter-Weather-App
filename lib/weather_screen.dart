@@ -1,8 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:weather_app/additional_information.dart';
+import 'package:weather_app/additional_infoItem.dart';
 import 'package:weather_app/hourly_forecast_item.dart';
 
 class WeatherScreen extends StatelessWidget {
@@ -50,7 +49,7 @@ class WeatherScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            '300 ° K',
+                            '300K',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -102,13 +101,16 @@ class WeatherScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  HourlyForecastItem(),
-                  HourlyForecastItem(),
-                  HourlyForecastItem(),
-                  HourlyForecastItem(),
-                  HourlyForecastItem(),
-                  HourlyForecastItem(),
-                  HourlyForecastItem(),
+                  HourlyForecastItem(
+                      time: '00:00', icon: Icons.cloud, temperature: '301.22'),
+                  HourlyForecastItem(
+                      time: '03:00', icon: Icons.sunny, temperature: '300.52'),
+                  HourlyForecastItem(
+                      time: '06:00', icon: Icons.cloud, temperature: '302.22'),
+                  HourlyForecastItem(
+                      time: '09:00', icon: Icons.sunny, temperature: '300.12'),
+                  HourlyForecastItem(
+                      time: '12:00', icon: Icons.cloud, temperature: '304.44'),
                 ],
               ),
             ),
@@ -133,7 +135,25 @@ class WeatherScreen extends StatelessWidget {
               height: 20,
             ),
 
-            AdditionalInformation(),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Humidity
+                  AdditionalInfoItem(
+                      icon: Icons.water_drop, lebel: 'Humidity', value: '94'),
+                  // Wind speed
+                  AdditionalInfoItem(
+                      icon: Icons.air, lebel: 'Wind Speed', value: '7.67'),
+                  // Pressure
+                  AdditionalInfoItem(
+                      icon: Icons.beach_access,
+                      lebel: 'Pressure',
+                      value: '1006'),
+                ],
+              ),
+            ),
           ],
         ),
       ),
