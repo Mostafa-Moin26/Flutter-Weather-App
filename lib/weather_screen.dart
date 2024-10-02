@@ -1,11 +1,20 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:weather_app/additional_infoItem.dart';
+import 'package:weather_app/api_key.dart';
 import 'package:weather_app/hourly_forecast_item.dart';
+import 'package:http/http.dart' as http;
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
+
+  Future getCurrentWeather() async {
+    String cityName = 'London';
+    final res = await http.get(
+      Uri.parse(
+          'https://api.openweathermap.org/data/2.5/weather?q=$cityName&APPID=$apiKey'),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
