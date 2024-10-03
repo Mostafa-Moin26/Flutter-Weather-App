@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:weather_app/additional_infoItem.dart';
@@ -5,15 +6,42 @@ import 'package:weather_app/api_key.dart';
 import 'package:weather_app/hourly_forecast_item.dart';
 import 'package:http/http.dart' as http;
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
 
+  @override
+  State<WeatherScreen> createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  double temp = 0.0;
+  void initState() {
+    super.initState();
+    getCurrentWeather();
+  }
+
   Future getCurrentWeather() async {
-    String cityName = 'London';
-    final res = await http.get(
-      Uri.parse(
-          'https://api.openweathermap.org/data/2.5/weather?q=$cityName&APPID=$apiKey'),
-    );
+    try {
+      String cityName = 'London';
+      final response = await http.get(
+        Uri.parse(
+            'https://api.openweathermap.org/data/2.5/weather?q=$cityName&APPID=$apiKey'),
+      );
+
+      if (response.statusCode != 200) {
+        print(
+            'Failed to load weather data. Status code: ${response.statusCode}');
+        throw 'Failed to load weather data';
+      }
+
+      final data = jsonDecode(response.body);
+
+      setState(() {
+        temp = data['main']['temp'];
+      });
+    } catch (e) {
+      print('Error: $e'); // Print the actual error for debugging
+    }
   }
 
   @override
@@ -53,28 +81,28 @@ class WeatherScreen extends StatelessWidget {
                       sigmaX: 10,
                       sigmaY: 10,
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           Text(
-                            '300K',
-                            style: TextStyle(
+                            '$temp K',
+                            style: const TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Icon(
+                          const Icon(
                             Icons.cloud,
                             size: 60,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             'Rain',
                             style: TextStyle(
                               fontSize: 22,
